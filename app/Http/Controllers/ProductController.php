@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductControler extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,6 +31,7 @@ class ProductControler extends Controller
             'slug' => 'required',
             'price' => 'required'
         ]);
+        
 
        return Product::create($request->all());
     }
@@ -54,7 +56,20 @@ class ProductControler extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->update($request->all());
+        return $product;
+    }
+
+     /**
+     * Search the specified resource from storage.
+     *
+     * @param  int  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
+    {
+        return Product::where('name','like','%'.$name.'%')->get();
     }
 
     /**
@@ -65,6 +80,6 @@ class ProductControler extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Product::destroy($id);
     }
 }

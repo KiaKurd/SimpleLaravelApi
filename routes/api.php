@@ -14,8 +14,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/produtcs', 'App/Http/Controller/ProductController@index');
-Route::post('/produtcs','App/Http/Controller/ProductController@store'); 
+
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/produtcs', 'App\Http\Controllers\ProductController@index');
+Route::get('/produtcs/{id}','App\Http\Controllers\ProductController@show');
+Route::get('/produtcs/search/{name}', 'App\Http\Controllers\ProductController@search');
+
+
+
+
+// Protected routes
+Route::Group(['middleware' => ['auth:sanctum']], function() {
+
+    Route::post('/produtcs','App\Http\Controllers\ProductController@store');    
+    Route::put('/produtcs/{id}', 'App\Http\Controllers\ProductController@update');
+    Route::delete('/produtcs/{id}', 'App\Http\Controllers\ProductController@destroy');
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+
+
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request){
